@@ -1,0 +1,30 @@
+name: Unpack project
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unpack project
+        run: |
+          unzip -q Luma-VisualsAlpha-Starter.zip -d extracted
+          cp -a extracted/luma-visuals-alpha/. .
+          rm -rf extracted
+          rm Luma-VisualsAlpha-Starter.zip
+          rm .github/workflows/unpack.yml
+
+      - name: Commit project
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Set up Luma Visuals Alpha"
+          git push
